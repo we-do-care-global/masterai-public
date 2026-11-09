@@ -34,7 +34,7 @@ jobs:
       - name: Build frontend
         run: bun run build
         env:
-          VITE_APP_BASE_PATH: /we-do-care-global/
+          VITE_APP_BASE_PATH: /masterai-public/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
