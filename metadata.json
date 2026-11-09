@@ -1,0 +1,6 @@
+{
+  "name": "We Do Care Global — AI Web Research & Expansion Platform",
+  "description": "AI-driven web research, system expansions, automated daily discovery (08:00 & 20:00), and two-way GitHub synchronization for We Do Care Global.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

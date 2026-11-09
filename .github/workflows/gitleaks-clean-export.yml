@@ -1,0 +1,48 @@
+name: Independent Clean Export Secret Scan
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  gitleaks-export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Export tracked source without Git history
+        run: |
+          mkdir -p "$RUNNER_TEMP/masterai-export"
+          git archive HEAD | tar -x -C "$RUNNER_TEMP/masterai-export"
+          test ! -e "$RUNNER_TEMP/masterai-export/.git"
+      - name: Gitleaks independent secret scan (redacted findings)
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/gitleaks-report"
+          set +e
+          docker run --rm \
+            -v "$RUNNER_TEMP/masterai-export:/scan:ro" \
+            -v "$RUNNER_TEMP/gitleaks-report:/report" \
+            zricethezav/gitleaks:v8.24.3 \
+            dir /scan --redact --no-banner --exit-code 1 \
+            --report-format json --report-path /report/findings.json
+          status=$?
+          set -e
+          if [ -f "$RUNNER_TEMP/gitleaks-report/findings.json" ]; then
+            python3 - "$RUNNER_TEMP/gitleaks-report/findings.json" <<'PY'
+          import json, sys
+          with open(sys.argv[1]) as f:
+              findings = json.load(f) or []
+          print(f"Gitleaks candidate findings: {len(findings)}")
+          for finding in findings:
+              print("rule=" + str(finding.get("RuleID", "unknown")) +
+                    " file=" + str(finding.get("File", "unknown")) +
+                    " line=" + str(finding.get("StartLine", "unknown")) +
+                    " [secret redacted]")
+          PY
+          fi
+          exit "$status"

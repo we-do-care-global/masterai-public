@@ -1,0 +1,24 @@
+name: Clean Publication Candidate Audit
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  audit-current-tree:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Audit tracked snapshot (redacted)
+        run: python3 scripts/audit-current-tree.py
+      - name: Verify no Git metadata in export
+        run: |
+          mkdir -p /tmp/masterai-publication-candidate
+          git archive HEAD | tar -x -C /tmp/masterai-publication-candidate
+          test ! -e /tmp/masterai-publication-candidate/.git
+          echo "Archive export excludes Git history; NOT cleared for publication."

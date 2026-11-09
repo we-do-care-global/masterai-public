@@ -1,0 +1,50 @@
+name: Daily AI Web Research Expansion
+
+on:
+  schedule:
+    # Candidate UTC hours for Sarajevo's 08:00 and 20:00, across CET/CEST.
+    # Runner validates actual Sarajevo local time to avoid duplicate DST runs.
+    - cron: '0 6,7,18,19 * * *'
+  workflow_dispatch:
+    inputs:
+      type:
+        description: 'Run Type (08:00 or 20:00)'
+        required: true
+        default: '08:00'
+      force:
+        description: 'Force execution (bypass idempotency)'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  run-daily-expansion:
+    name: Run Automated Web Research Expansion
+    # Opt in only after durable storage and cross-run idempotency are implemented.
+    if: vars.ENABLE_DURABLE_RESEARCH == 'true'
+    runs-on: ubuntu-latest
+    # No automatic publication until durable idempotency and storage are implemented.
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Execute Daily Research Cron Runner
+        run: bunx tsx scripts/run-daily-cron.ts
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          # GitHub writes deliberately disabled for scheduled research.
+          ALLOW_CURATED_RESEARCH_FALLBACK: 'false'
+          DAILY_RESEARCH_TZ: 'Europe/Sarajevo'
+          RUN_TYPE: ${{ github.event_name == 'schedule' && 'auto' || inputs.type || '08:00' }}
+          FORCE_RUN: ${{ github.event.inputs.force || 'false' }}
