@@ -2,6 +2,8 @@ name: Independent Clean Export Secret Scan
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
   pull_request:
 
 permissions:
