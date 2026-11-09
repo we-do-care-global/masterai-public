@@ -1,6 +1,6 @@
 # We Do Care Global — AI Web Research & Expansion Platform
 
-> **Release status (November 2026):** Public source and frontend demonstration only. Authentication is intentionally disabled and protected backend APIs fail closed with HTTP 503. GitHub Pages hosts static assets, not the Express backend, scheduled research, or operational GitHub synchronization. Do not use this build for production operations or enter credentials into the demo.
+> **Release status (November 2026):** Public source and static frontend project overview only. The GitHub Pages build displays a noninteractive release-information landing page rather than a mock login screen. Authentication is intentionally disabled and protected backend APIs fail closed with HTTP 503. GitHub Pages hosts static assets, not the Express backend, scheduled research, or operational GitHub synchronization. Do not use this build for production operations or enter credentials into the demo.
 
 
 > **Continuous Improvement, Web Research Expansions, and Two-Way GitHub Automation**  
