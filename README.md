@@ -1,5 +1,8 @@
 # We Do Care Global — AI Web Research & Expansion Platform
 
+> **Release status (November 2026):** Public source and frontend demonstration only. Authentication is intentionally disabled and protected backend APIs fail closed with HTTP 503. GitHub Pages hosts static assets, not the Express backend, scheduled research, or operational GitHub synchronization. Do not use this build for production operations or enter credentials into the demo.
+
+
 > **Continuous Improvement, Web Research Expansions, and Two-Way GitHub Automation**  
 > Serving [We Do Care Global](https://github.com/we-do-care-global/we-do-care-global) and the live site at [we-do-care-global.github.io](https://we-do-care-global.github.io/we-do-care-global/).
 
@@ -34,7 +37,7 @@ This platform automates technical and operational growth for We Do Care Global p
 ### Frontend
 - `VITE_SUPABASE_URL`: Supabase project URL.
 - `VITE_SUPABASE_ANON_KEY`: Public client anon key.
-- `VITE_APP_BASE_PATH`: Base path when deployed under GitHub Pages (e.g. `/ai-research/` or `/we-do-care-global/`).
+- `VITE_APP_BASE_PATH`: Base path when deployed under GitHub Pages (`/masterai-public/` for this repository).
 
 ### Backend / Edge Functions
 - `GEMINI_API_KEY`: API key for Gemini 3.8 Flash with Google Search grounding.
