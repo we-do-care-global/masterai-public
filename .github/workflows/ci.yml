@@ -35,3 +35,23 @@ jobs:
         run: bun run build
         env:
           VITE_APP_BASE_PATH: /masterai-public/
+
+      - name: Verify GitHub Pages static build
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s dist/index.html
+          test -d dist/assets
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path('dist/index.html').read_text()
+          paths = re.findall(r'(?:src|href)=["\']([^"\']+)["\']', html)
+          assets = [p for p in paths if p.endswith(('.js', '.css'))]
+          assert assets, 'No compiled JS/CSS references found in index.html'
+          for asset in assets:
+              assert asset.startswith('/masterai-public/'), f'Unexpected asset URL: {asset}'
+              local = Path('dist') / asset.removeprefix('/masterai-public/')
+              assert local.is_file(), f'Missing compiled asset: {local}'
+          print(f'Pages static asset check passed ({len(assets)} assets)')
+          PY
