@@ -401,6 +401,35 @@ export default function App() {
     }
   };
 
+  // GitHub Pages is a static public preview: it has no trusted backend or OAuth.
+  // Never present mock sign-in controls as if they could authenticate users.
+  if (import.meta.env.BASE_URL === '/masterai-public/') {
+    return (
+      <main className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-6">
+        <section className="w-full max-w-2xl rounded-2xl border border-slate-700 bg-slate-900 p-8 shadow-xl">
+          <p className="text-sm font-semibold uppercase tracking-widest text-sky-400">Public source preview</p>
+          <h1 className="mt-3 text-3xl font-bold">MasterAI Research & Expansion Platform</h1>
+          <p className="mt-4 text-slate-300">
+            This GitHub Pages build is a static project overview, not a connected application.
+            Sign-in, protected APIs, scheduled research, and GitHub synchronization are disabled.
+          </p>
+          <p className="mt-4 text-slate-300">
+            Do not enter credentials or expect changes made here to affect live systems.
+            The backend requires verified authentication before operational use.
+          </p>
+          <a
+            className="mt-6 inline-block rounded-lg bg-sky-500 px-5 py-3 font-semibold text-slate-950 hover:bg-sky-400"
+            href="https://github.com/we-do-care-global/masterai-public"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            View source and release documentation
+          </a>
+        </section>
+      </main>
+    );
+  }
+
   if (!user) {
     return <LoginView onLogin={handleLogin} onGoogleLogin={handleGoogleLogin} />;
   }
