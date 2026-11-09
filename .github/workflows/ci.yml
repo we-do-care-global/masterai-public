@@ -34,4 +34,4 @@ jobs:
       - name: Build Application
         run: bun run build
         env:
-          VITE_APP_BASE_PATH: /ai-research/
+          VITE_APP_BASE_PATH: /masterai-public/
