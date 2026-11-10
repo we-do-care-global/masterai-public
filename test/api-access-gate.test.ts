@@ -16,6 +16,12 @@ describe('API fail-closed route gate', () => {
     });
   }
 
+  it('blocks alternate casing and encoded protected route roots', () => {
+    for (const path of ['/API/projects', '/Auth/Google', '/%61pi/projects', '/%61uth/google', '/api%2Fprojects', '/%zz']) {
+      assert.equal(isDisabledApiPath(path), true, path);
+    }
+  });
+
   it('keeps frontend paths outside the API gate', () => {
     for (const path of ['/', '/index.html', '/assets/app.js', '/dashboard']) {
       assert.equal(isDisabledApiPath(path), false);
